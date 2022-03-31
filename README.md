@@ -1,7 +1,7 @@
 # Archlinux_installation
 
 
-# Tastaturlayout einstellen
+## Tastaturlayout einstellen
 ```sh
 loadkeys de-latin1
 Font
