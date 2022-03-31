@@ -13,7 +13,7 @@ Localectl | grep DE
 Pacman -Syy
 ```
 
-# Netzwerk- und Internetzugang
+## Netzwerk- und Internetzugang
 ```sh
 Ip a
 
@@ -31,7 +31,7 @@ cat /etc/pacman.d/mirrorlist
 pacman -Syy
 ```
 
-# Festplatten-Partitionierung/ Formatierung
+## Festplatten-Partitionierung/ Formatierung
 ```sh
 lsblk
 gdisk /dev/sda
@@ -45,7 +45,7 @@ gdisk /dev/sda
 (gdisk) w
 ```
 
-# Festplatten-Partitionierung/ Formatierung bios nbr
+## Festplatten-Partitionierung/ Formatierung bios nbr
 ```sh
 fdisk /dev/sda
 (fdisk) n p +512M (maximal)
@@ -94,19 +94,19 @@ sda 8:0 0 50G 0 disk
 └─sda4 8:4 0 20G 0 part /mnt/home
 ```
 
-# Installation des Grundsystems
+## Installation des Grundsystems
 
 ```sh
 pacstrap /mnt base linux linux-firmware vim git intel-ucode
 ```
 
-# file systemtable gener
+## file systemtable gener
 ```sh
 genfstab -U /mnt >> /mnt/etc/fstab
 cat /mnt/etc/fstab
 ```
 
-# Konfiguration des Basissystems
+## Konfiguration des Basissystems
 
 ```sh
 arch-chroot /mnt
@@ -127,22 +127,22 @@ vim /etc/hosts
 (hosts)127.0.1.1 archefi.localdomain archefi
 ```
 
-# Boot-Konfiguration
+## Boot-Konfiguration
 ```sh
 pacman -S grub efibootmgr networkmanager network-manager-applet base-devel dialog mtools dosfstools wpa_supplicant reflector linux-headers xdg-utils xdg-user-dirs rsync inetutils dnsutils nfs-utils gvfs gvfs-smb openssh xf86-video-intel bluez bluez-utils cups hplip pulseaudio alsa-utils pavucontrol terminus-font
 ```
 
-# BIOS (nbr)
+## BIOS (nbr)
 ```sh
 pacman -S grub networkmanager network-manager-applet base-devel dialog mtools dosfstools wpa_supplicant reflector linux-headers cups hplip xdg-utils xdg-user-dirs rsync inetutils dnsutils nfs-utils gvfs gvfs-smb openssh xf86-video-intel bluez bluez-utils pulseaudio alsa-utils pavucontrol terminus-font
 ```
 
-# in bios brauchen kein efibootmgr
+## in bios brauchen kein efibootmgr
 ```sh
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
 ```
 
-# BIOS (nbr)
+## BIOS (nbr)
 ```sh
 grub-install --target=i386-pc /dev/sda
 ```
@@ -171,4 +171,40 @@ exit
 umount -a
 reboot
 ```
- 
+
+# Reparaturarbeiten
+```sh
+mount /dev/sda1 /mnt/boot/efi
+mkinitcpio -P linux
+grub-mkconfig -o /boot/grub/grub.cfg
+```
+
+## SSH-Server:
+```sh
+pacman -S openssh
+systemctl enable --now sshd
+```
+
+## Netzwerk aktivieren
+```sh
+systemctl enable --now NetworkManager
+```
+
+# xorg install
+
+```sh
+sudo pacman -S --needed xorg
+
+sudo pacman -S --needed xfce4 mousepad parole ristretto thunar-archive-plugin thunar-media-tags-plugin xfce4-battery-plugin xfce4-datetime-plugin xfce4-mount-plugin xfce4-netload-plugin xfce4-notifyd xfce4-pulseaudio-plugin xfce4-screensaver xfce4-taskmanager xfce4-wavelan-plugin xfce4-weather-plugin xfce4-whiskermenu-plugin xfce4-xkb-plugin file-roller network-manager-applet leafpad epdfview galculator lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings capitaine-cursors arc-gtk-theme xdg-user-dirs-gtk
+
+sudo pacman -S --needed xfce4-goodies
+sudo pacman -S --needed virtualbox-guest-utils xf86-video-vmware
+
+sudo systemctl enable lightdm
+reboot
+
+```
+
+
+
+
